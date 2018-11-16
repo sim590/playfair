@@ -18,6 +18,16 @@ char alphabet[25] = {
 char key[25];
 char BUF[BUFLEN];
 
+char* substr(char* str, size_t begin, size_t end) {
+    size_t slen = end-begin+1;
+    if (slen <= 0) return NULL;
+
+    char* ss = (char*)calloc(slen, sizeof(char));
+    memcpy(ss, str+begin, slen);
+    ss[slen] = '\0';
+    return ss;
+}
+
 bool is_in_str(char c, char* str, size_t begin, int end) {
     for (size_t i = begin; i < end; ++i)
         if (str[i] == c) return true;

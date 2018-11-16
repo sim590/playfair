@@ -51,6 +51,25 @@ int main(int argc, char *argv[]) {
     char* subkey = argv[1];
     fill_key(subkey);
 
+#if DEBUG==1
+    for (size_t i = 0; i < 25; ++i) {
+        printf("%c ", key[i]);
+        if (i%5 == 4)
+            printf("\n");
+    }
+#endif
+
+    char* plaintext = malloc(sizeof(char));
+    plaintext[0] = '\0';
+    while (fgets(BUF, BUFLEN, stdin)) {
+        plaintext = realloc(plaintext, BUFLEN);
+        strcpy(plaintext, BUF);
+    }
+
+#if DEBUG==1
+    printf("%s\n", plaintext);
+#endif
+
     return 0;
 }
 

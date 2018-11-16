@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
+
 #include "config.h"
 
 #define BUFLEN 1024
@@ -74,6 +76,8 @@ void convert_for_scheme_input(char** strp) {
         i += strspn(str+i, WHITESPACES);
         size_t j = i+1;
         j += strspn(str+j, WHITESPACES);
+        str[i] = tolower(str[i]);
+        str[j] = tolower(str[j]);
         if (str[i] == str[j] || !is_letter(str[j])) {
             if (strlen(str)+1 == ssize) {
                 ssize *= 2;

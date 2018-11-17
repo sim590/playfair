@@ -2,10 +2,12 @@
 CC = gcc
 CFLAGS = -g -Wall
 
+playfair_CONFIG = config.h
+
 all: debug playfair
 
 debug:
-	sed -i 's/\(#define DEBUG \).*/\1$(if $(DEBUG),1,0)/' config.h
+	sed 's/\(#define DEBUG \).*/\1$(if $(DEBUG),1,0)/' $(playfair_CONFIG).in >$(playfair_CONFIG)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

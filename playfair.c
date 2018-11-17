@@ -109,8 +109,8 @@ char* encrypt(const char* plaintext) {
             ciphertext[i] = key[(ki/5)*5+(ki+1)%5];
             ciphertext[j] = key[(kj/5)*5+(kj+1)%5];
         } else if (ki%5 == kj%5) { /* sur la même colonne ! */
-            ciphertext[i] = key[(ki+5)%25];
-            ciphertext[j] = key[(kj+5)%25];
+            ciphertext[i] = key[((ki+5)%25+25)%25];
+            ciphertext[j] = key[((kj+5)%25+25)%25];
         } else { /* dans un rectangle ! */
             ciphertext[i] = key[(ki/5)*5+kj%5];
             ciphertext[j] = key[(kj/5)*5+ki%5];
@@ -134,8 +134,8 @@ char* decrypt(const char* ciphertext) {
             plaintext[i] = key[(ki/5)*5+(ki-1)%5];
             plaintext[j] = key[(kj/5)*5+(kj-1)%5];
         } else if (ki%5 == kj%5) { /* sur la même colonne ! */
-            plaintext[i] = key[(ki-5)%25];
-            plaintext[j] = key[(kj-5)%25];
+            plaintext[i] = key[((ki-5)%25+25)%25];
+            plaintext[j] = key[((kj-5)%25+25)%25];
         } else { /* dans un rectangle ! */
             plaintext[i] = key[(ki/5)*5+kj%5];
             plaintext[j] = key[(kj/5)*5+ki%5];

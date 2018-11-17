@@ -95,55 +95,35 @@ void convert_for_scheme_input(char** strp) {
     str = realloc(str, slen);
 }
 
-char* encrypt(const char* plaintext) {
-    size_t plen = strlen(plaintext);
-    char* ciphertext = (char*)calloc(plen+1, sizeof(char));
-    strcpy(ciphertext, plaintext);
-    for (size_t i = 0; i < plen; i+=2) {
-        i += strspn(plaintext+i, WHITESPACES);
-        size_t j = i+1;
-        j += strspn(plaintext+j, WHITESPACES);
-        size_t ki = strchr(key, plaintext[i])-key;
-        size_t kj = strchr(key, plaintext[j])-key;
-        if (ki/5 == kj/5) { /* sur la même ligne ! */
-            ciphertext[i] = key[(ki/5)*5+(ki+1)%5];
-            ciphertext[j] = key[(kj/5)*5+(kj+1)%5];
-        } else if (ki%5 == kj%5) { /* sur la même colonne ! */
-            ciphertext[i] = key[((ki+5)%25+25)%25];
-            ciphertext[j] = key[((kj+5)%25+25)%25];
-        } else { /* dans un rectangle ! */
-            ciphertext[i] = key[(ki/5)*5+kj%5];
-            ciphertext[j] = key[(kj/5)*5+ki%5];
-        }
-        i = j-1;
-    }
-    return ciphertext;
-}
+char* transform_text(const char* text, const char* op) {
+    int dir = !strcmp(op, "encrypt") ? 1 : (!strcmp(op, "decrypt") ? -1 : 0);
+    if (!dir) return NULL;
 
-char* decrypt(const char* ciphertext) {
-    size_t clen = strlen(ciphertext);
-    char* plaintext = (char*)calloc(clen+1, sizeof(char));
-    strcpy(plaintext, ciphertext);
-    for (size_t i = 0; i < clen; i+=2) {
-        i += strspn(plaintext+i, WHITESPACES);
+    size_t plen = strlen(text);
+    char* rtext = (char*)calloc(plen+1, sizeof(char));
+    strcpy(rtext, text);
+    for (size_t i = 0; i < plen; i+=2) {
+        i += strspn(text+i, WHITESPACES);
         size_t j = i+1;
-        j += strspn(plaintext+j, WHITESPACES);
-        size_t ki = strchr(key, plaintext[i])-key;
-        size_t kj = strchr(key, plaintext[j])-key;
+        j += strspn(text+j, WHITESPACES);
+        int ki = strchr(key, text[i])-key;
+        int kj = strchr(key, text[j])-key;
         if (ki/5 == kj/5) { /* sur la même ligne ! */
-            plaintext[i] = key[(ki/5)*5+(ki-1)%5];
-            plaintext[j] = key[(kj/5)*5+(kj-1)%5];
+            rtext[i] = key[(ki/5)*5+(ki+dir)%5];
+            rtext[j] = key[(kj/5)*5+(kj+dir)%5];
         } else if (ki%5 == kj%5) { /* sur la même colonne ! */
-            plaintext[i] = key[((ki-5)%25+25)%25];
-            plaintext[j] = key[((kj-5)%25+25)%25];
+            rtext[i] = key[((ki+dir*5)%25+25)%25];
+            rtext[j] = key[((kj+dir*5)%25+25)%25];
         } else { /* dans un rectangle ! */
-            plaintext[i] = key[(ki/5)*5+kj%5];
-            plaintext[j] = key[(kj/5)*5+ki%5];
+            rtext[i] = key[(ki/5)*5+kj%5];
+            rtext[j] = key[(kj/5)*5+ki%5];
         }
         i = j-1;
     }
-    return plaintext;
+    return rtext;
 }
+char* encrypt(const char* plaintext)  { return transform_text(plaintext, "encrypt");  }
+char* decrypt(const char* ciphertext) { return transform_text(ciphertext, "decrypt"); }
 
 int main(int argc, char *argv[]) {
     if (argc < 2)

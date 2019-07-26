@@ -24,7 +24,7 @@ void print_usage(FILE* out) {
     fprintf(out, "%s -- Chiffre de playfair. Lis l'entrée standard et produit le cryptogramme\n", PRGNAME);
     fprintf(out, "%*ssur la sortie standard.\n\n", (int)strlen(PRGNAME)+4, "");
     fprintf(out, "SYNOPSYS\n");
-    fprintf(out, "    %s [-hv] [-d]\n", PRGNAME);
+    fprintf(out, "    %s [-hv] [-d] {clef}\n", PRGNAME);
     fprintf(out, "    \n");
     fprintf(out, "OPTIONS\n");
     fprintf(out, "    -h|--help\n");

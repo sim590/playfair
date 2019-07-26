@@ -1,9 +1,12 @@
 .PHONY: clean, mrproper
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -I.
 
 playfair_CONFIG = config.h
-playfair_SOURCES = playfair.c cipher.c shelper.c
+playfair_SOURCES = \
+				   src/playfair.c \
+				   src/cipher.c \
+				   src/shelper.c
 
 all: debug playfair
 

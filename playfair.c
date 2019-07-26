@@ -79,9 +79,6 @@ struct arguments parse_options(int argc, char* const argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 2)
-        return 1;
-
     struct arguments args = parse_options(argc, argv);
     if (args.error) {
         fprintf(stderr, "erreur innattendue... Terminaison.\n");
